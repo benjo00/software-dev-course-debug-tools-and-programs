@@ -6,17 +6,24 @@ const cart = [
 
 function calculateTotal(cartItems) {
   let total = 0;
-  for (let i = 0; i <= cartItems.length; i++) { // Bug: <= should be <
+  for (let i = 0; i < cartItems.length; i++) { // Bug: <= should be <
       total += cartItems[i].price; // Bug: cartItems[i] is undefined on the last iteration
   }
   return total;
 }
 
 function applyDiscount(total, discountRate) {
-  return total - total * discountRate; // Bug: Missing validation for discountRate
+  if (typeof discountRate !== "number" || discountRate > 1) {
+    console.warn("wrong disc rate");
+  return total;
+}
+return total - total * discountRate;
 }
 
 function generateReceipt(cartItems, total) {
+  if (isNaN(total)) {
+    total = 0;
+  }
   let receipt = "Items:\n";
   cartItems.forEach(item => {
       receipt += `${item.name}: $${item.price}\n`;
